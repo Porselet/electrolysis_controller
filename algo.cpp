@@ -1,6 +1,6 @@
 #include "algo.h"
 #include "config.h"
-
+#include "settings.h"
 // ---------------------------------------------------------------------------
 // Состояние автомата
 // ---------------------------------------------------------------------------
@@ -51,14 +51,14 @@ void algo_tick(uint32_t dt_ms, float P,
         // Накачка: V1 открыт, V2 закрыт. Ждём P >= FILL_THRESHOLD.
         STEP(FILL) {
             V1(OPEN); V2(CLOSE);
-            WAIT_UNTIL(P >= FILL_THRESHOLD);
+            WAIT_UNTIL(P >= g_fill_threshold);
             NEXT(HOLD);
         } END_STEP
 
         // Выдержка: оба закрыты. Ждём HOLD_TIME_SEC.
         STEP(HOLD) {
             V1(CLOSE); V2(CLOSE);
-            WAIT_SECONDS(HOLD_TIME_SEC);
+            WAIT_SECONDS(g_hold_time_sec);
             NEXT(VENT);
         } END_STEP
 

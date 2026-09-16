@@ -45,4 +45,38 @@
 #define TELEMETRY_PERIOD_MS 500UL   // период периодического лога
 #define TELEMETRY_ENABLED   1       // 0 — отключить Serial-лог
 
+// ---------------------------------------------------------------------------
+// Кнопки KeyShield
+// ---------------------------------------------------------------------------
+#define PIN_BUTTONS          A0
+#define BTN_DEBOUNCE_MS      30
+
+// Пороги ADC (типичные для KeyShield, уточнить на железе)
+#define BTN_ADC_RIGHT_MAX    50
+#define BTN_ADC_UP_MAX       200
+#define BTN_ADC_DOWN_MAX     400
+#define BTN_ADC_LEFT_MAX     600
+#define BTN_ADC_SELECT_MAX   800
+
+// ---------------------------------------------------------------------------
+// Уставки: диапазоны и шаги
+// ---------------------------------------------------------------------------
+#define FILL_MIN_ATM         0.0f
+#define FILL_MAX_ATM         25.0f
+#define FILL_STEP_ATM        0.5f
+
+#define HOLD_MIN_MIN         0
+#define HOLD_MAX_MIN         1440
+#define HOLD_STEP_MIN        1
+
+// ---------------------------------------------------------------------------
+// EEPROM
+// ---------------------------------------------------------------------------
+#define EEPROM_MAGIC         0xEC02   // версия 2 (добавили хранение уставок)
+#define EEPROM_ADDR_MAGIC    0
+#define EEPROM_ADDR_FILL     2
+#define EEPROM_ADDR_HOLD     6
+
+
+
 #endif
