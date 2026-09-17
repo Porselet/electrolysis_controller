@@ -8,7 +8,8 @@
 // ---------------------------------------------------------------------------
 // Экраны
 // ---------------------------------------------------------------------------
-enum UiScreen {
+enum UiScreen
+{
     UI_MAIN = 0,
     UI_SENSORS,
     UI_SETTINGS
@@ -29,8 +30,8 @@ void ui_draw_main(enum Step step, uint32_t timer_s,
 // ---------------------------------------------------------------------------
 // Экран 1: датчики
 // ---------------------------------------------------------------------------
-void ui_draw_sensors(const struct SensorReading* p1,
-                     const struct SensorReading* p2);
+void ui_draw_sensors(const struct SensorReading *p1,
+                     const struct SensorReading *p2);
 
 // ---------------------------------------------------------------------------
 // Экран 2: уставки

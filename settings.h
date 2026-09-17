@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 // Текущие значения уставок (загружены из EEPROM или дефолты из config.h)
-extern float    g_fill_threshold;
+extern float g_fill_threshold;
 extern uint32_t g_hold_time_sec;
 
 // Загрузить из EEPROM. Если magic не совпал — берём дефолты из config.h.

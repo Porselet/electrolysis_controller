@@ -8,41 +8,62 @@
 // ---------------------------------------------------------------------------
 // Причины аварии
 // ---------------------------------------------------------------------------
-enum FaultReason {
+enum FaultReason
+{
     FAULT_NONE = 0,
-    FAULT_OVER,        // P > P_MAX
-    FAULT_SENSOR,      // оба датчика невалидны
-    FAULT_MISMATCH     // |P1 - P2| > P_DIFF_MAX
+    FAULT_OVER,    // P > P_MAX
+    FAULT_SENSOR,  // оба датчика невалидны
+    FAULT_MISMATCH // |P1 - P2| > P_DIFF_MAX
 };
 
 // ---------------------------------------------------------------------------
-// Причины деградации
+// Причины деградации системы датчиков.
+//
+// Штатно работают оба датчика (P1 и P2), установленные в одной точке.
+// Если один из них отказывает (обрыв петли, КЗ, уход за рельсы АЦП),
+// система НЕ переходит в аварию — она деградирует до одного живого
+// датчика и продолжает работать по нему. Рабочее давление берётся
+// из единственного валидного источника.
+//
+// DEG_P1 / DEG_P2 описывают СОСТОЯНИЕ КОМПЛЕКТА (какой датчик остался
+// жив), а не конкретного датчика. Читать так:
+//
+//     DEG_P1  —  P2 отказал, работаем по P1
+//     DEG_P2  —  P1 отказал, работаем по P2
+//
+// На экране основного режима отказ отображается как "P1 OPEN" / "P2 OPEN"
+// (см. ui_draw_main), в телеметрии — как "DEG_P1" / "DEG_P2".
+//
+// Полный отказ обоих датчиков — это уже не деградация, а авария
+// FAULT_SENSOR (см. safety.cpp).
 // ---------------------------------------------------------------------------
-enum DegradedReason {
+enum DegradedReason
+{
     DEG_NONE = 0,
-    DEG_P1,            // валиден только P2
-    DEG_P2             // валиден только P1
+    DEG_P1, // P2 отказал, работаем по P1
+    DEG_P2  // P1 отказал, работаем по P2
 };
 
 // ---------------------------------------------------------------------------
 // Результат проверки безопасности
 // ---------------------------------------------------------------------------
-struct SafetyResult {
-    enum FaultReason    fault;
+struct SafetyResult
+{
+    enum FaultReason fault;
     enum DegradedReason degraded;
-    float               P;              // рабочее давление (валидно при !fault)
-    float               dP;             // расхождение датчиков
-    bool                pressure_valid; // false при fault
+    float P;             // рабочее давление (валидно при !fault)
+    float dP;            // расхождение датчиков
+    bool pressure_valid; // false при fault
 };
 
 // ---------------------------------------------------------------------------
 // API
 // ---------------------------------------------------------------------------
-void safety_check(const struct SensorReading* p1,
-                  const struct SensorReading* p2,
-                  struct SafetyResult* result);
+void safety_check(const struct SensorReading *p1,
+                  const struct SensorReading *p2,
+                  struct SafetyResult *result);
 
 void safety_apply_fault(enum FaultReason reason, bool v2_current,
-                        bool* v1_out, bool* v2_out);
+                        bool *v1_out, bool *v2_out);
 
 #endif

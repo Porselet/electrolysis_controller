@@ -4,79 +4,77 @@
 // ---------------------------------------------------------------------------
 // Пины
 // ---------------------------------------------------------------------------
-#define PIN_P1          A1
-#define PIN_P2          A2
-#define PIN_V1          11
-#define PIN_V2          12
-#define PIN_ALARM       13
+#define PIN_P1 A1
+#define PIN_P2 A2
+#define PIN_V1 11
+#define PIN_V2 12
+#define PIN_ALARM 13
 
 // ---------------------------------------------------------------------------
 // Датчики давления 4-20 мА
 // ---------------------------------------------------------------------------
-#define R_SHUNT         150.0f      // Ом
-#define VREF            5.0f        // В
-#define ADC_MAX         1023.0f
-#define P_RANGE         25.0f       // атм, верхняя граница датчика
-#define MEDIAN_N        9           // точек медианы АЦП
+#define R_SHUNT 150.0f // Ом
+#define VREF 5.0f      // В
+#define ADC_MAX 1023.0f
+#define P_RANGE 25.0f // атм, верхняя граница датчика
+#define MEDIAN_N 9    // точек медианы АЦП
 
 // Пороги диагностики петли 4-20 мА
-#define MA_OPEN_MAX     3.6f        // ниже — обрыв
-#define MA_SHORT_MIN    21.0f       // выше — перегруз/КЗ
-#define V_RAIL_LOW      0.1f        // В, нижняя рельса
-#define V_RAIL_HIGH     4.9f        // В, верхняя рельса
+#define MA_OPEN_MAX 3.6f   // ниже — обрыв
+#define MA_SHORT_MIN 21.0f // выше — перегруз/КЗ
+#define V_RAIL_LOW 0.1f    // В, нижняя рельса
+#define V_RAIL_HIGH 4.9f   // В, верхняя рельса
 
 // ---------------------------------------------------------------------------
 // Алгоритм цикла
 // ---------------------------------------------------------------------------
-#define FILL_THRESHOLD      20.0f       // атм, конец накачки
-#define HOLD_TIME_SEC       36UL      // с, выдержка (1 час)
-#define VENT_THRESHOLD      0.5f        // атм, конец сброса
+#define FILL_THRESHOLD 20.0f // атм, конец накачки
+#define HOLD_TIME_SEC 36UL   // с, выдержка (1 час)
+#define VENT_THRESHOLD 0.5f  // атм, конец сброса
 
 // ---------------------------------------------------------------------------
 // Аварии
 // ---------------------------------------------------------------------------
-#define P_MAX_BAR       23.0f       // атм, порог overpressure
-#define P_DIFF_MAX      1.0f        // атм, допустимое расхождение датчиков
+#define P_MAX_BAR 23.0f // атм, порог overpressure
+#define P_DIFF_MAX 1.0f // атм, допустимое расхождение датчиков
 
 // ---------------------------------------------------------------------------
 // Временные характеристики
 // ---------------------------------------------------------------------------
-#define UI_PERIOD_MS        250UL   // период обновления LCD
-#define TELEMETRY_PERIOD_MS 500UL   // период периодического лога
-#define TELEMETRY_ENABLED   1       // 0 — отключить Serial-лог
+#define UI_PERIOD_MS 250UL        // период обновления LCD
+#define TELEMETRY_PERIOD_MS 500UL // период периодического лога
+#define TELEMETRY_ENABLED 1       // 0 — отключить Serial-лог
 
 // ---------------------------------------------------------------------------
 // Кнопки KeyShield
 // ---------------------------------------------------------------------------
-#define PIN_BUTTONS          A0
-#define BTN_DEBOUNCE_MS      30
+#define PIN_BUTTONS A0
+#define BTN_DEBOUNCE_MS 30
 
 // Пороги ADC (типичные для KeyShield, уточнить на железе)
-#define BTN_ADC_RIGHT_MAX    50
-#define BTN_ADC_UP_MAX       200
-#define BTN_ADC_DOWN_MAX     400
-#define BTN_ADC_LEFT_MAX     600
-#define BTN_ADC_SELECT_MAX   800
+#define BTN_ADC_RIGHT_MAX 50
+#define BTN_ADC_UP_MAX 200
+#define BTN_ADC_DOWN_MAX 400
+#define BTN_ADC_LEFT_MAX 600
+#define BTN_ADC_SELECT_MAX 800
 
 // ---------------------------------------------------------------------------
 // Уставки: диапазоны и шаги
 // ---------------------------------------------------------------------------
-#define FILL_MIN_ATM         0.0f
-#define FILL_MAX_ATM         25.0f
-#define FILL_STEP_ATM        0.5f
+#define FILL_MIN_ATM 0.0f
+#define FILL_MAX_ATM 25.0f
+#define FILL_STEP_ATM 0.5f
 
-#define HOLD_MIN_MIN         0
-#define HOLD_MAX_MIN         1440
-#define HOLD_STEP_MIN        1
+#define HOLD_MIN_MIN 0
+#define HOLD_MAX_MIN 1440
+#define HOLD_STEP_MIN 1
 
 // ---------------------------------------------------------------------------
 // EEPROM
 // ---------------------------------------------------------------------------
-#define EEPROM_MAGIC         0xEC02   // версия 2 (добавили хранение уставок)
-#define EEPROM_ADDR_MAGIC    0
-#define EEPROM_ADDR_FILL     2
-#define EEPROM_ADDR_HOLD     6
-
-
+#define EEPROM_MAGIC 0xEC02 // версия 2 (добавили хранение уставок)
+#define EEPROM_ADDR_MAGIC 0
+#define EEPROM_ADDR_FILL 2
+#define EEPROM_ADDR_HOLD 6
 
 #endif

@@ -7,27 +7,29 @@
 // ---------------------------------------------------------------------------
 // Статус датчика
 // ---------------------------------------------------------------------------
-enum SensorState {
+enum SensorState
+{
     SENS_OK = 0,
-    SENS_OPEN,          // обрыв петли
-    SENS_SHORT,         // перегруз / КЗ
-    SENS_RAIL_LOW,      // сырое напряжение у нижней рельсы
-    SENS_RAIL_HIGH      // сырое напряжение у верхней рельсы
+    SENS_OPEN,     // обрыв петли
+    SENS_SHORT,    // перегруз / КЗ
+    SENS_RAIL_LOW, // сырое напряжение у нижней рельсы
+    SENS_RAIL_HIGH // сырое напряжение у верхней рельсы
 };
 
 // ---------------------------------------------------------------------------
 // Показание датчика
 // ---------------------------------------------------------------------------
-struct SensorReading {
-    float               bar;
-    float               mA;
-    enum SensorState    state;
+struct SensorReading
+{
+    float bar;
+    float mA;
+    enum SensorState state;
 };
 
 // ---------------------------------------------------------------------------
 // API
 // ---------------------------------------------------------------------------
 void sensors_init(void);
-void sensors_read(struct SensorReading* p1, struct SensorReading* p2);
+void sensors_read(struct SensorReading *p1, struct SensorReading *p2);
 
 #endif

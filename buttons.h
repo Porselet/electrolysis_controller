@@ -1,7 +1,8 @@
 #ifndef BUTTONS_H
 #define BUTTONS_H
 
-enum Button {
+enum Button
+{
     BTN_NONE = 0,
     BTN_RIGHT,
     BTN_UP,

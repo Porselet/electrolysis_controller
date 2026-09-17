@@ -4,6 +4,7 @@
 #include "ui.h"
 #include "config.h"
 #include "settings.h"
+#include <string.h>
 
 // ---------------------------------------------------------------------------
 // LCD: пины KeyShield
@@ -13,24 +14,27 @@ static LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 // ---------------------------------------------------------------------------
 // Имена шагов
 // ---------------------------------------------------------------------------
-static const char* const STEP_NAMES[] = { "FILL", "HOLD", "VENT" };
+static const char *const STEP_NAMES[] = {"FILL", "HOLD", "VENT"};
 
 // ---------------------------------------------------------------------------
 // Форматирование
 // ---------------------------------------------------------------------------
-static void format_hms(char* buf, uint32_t t_s) {
+static void format_hms(char *buf, uint32_t t_s)
+{
     uint8_t hh = (t_s / 3600UL) % 100UL;
-    uint8_t mm = (t_s / 60UL)   % 60UL;
-    uint8_t ss =  t_s           % 60UL;
+    uint8_t mm = (t_s / 60UL) % 60UL;
+    uint8_t ss = t_s % 60UL;
     sprintf(buf, "%02u:%02u:%02u", hh, mm, ss);
 }
 
-static void format_pressure(char* buf, float p) {
+static void format_pressure(char *buf, float p)
+{
     dtostrf(p, 5, 1, buf);
 }
 
 // Затирает строку пробелами
-static void clear_line(uint8_t row) {
+static void clear_line(uint8_t row)
+{
     lcd.setCursor(0, row);
     lcd.print(F("                "));
 }
@@ -39,7 +43,8 @@ static void clear_line(uint8_t row) {
 // Экран 0: основной
 // ---------------------------------------------------------------------------
 void ui_draw_main(enum Step step, uint32_t timer_s,
-                  float P, float dP, enum DegradedReason deg) {
+                  float P, float dP, enum DegradedReason deg)
+{
 
     char tbuf[10];
     format_hms(tbuf, timer_s);
@@ -52,7 +57,8 @@ void ui_draw_main(enum Step step, uint32_t timer_s,
 
     lcd.setCursor(0, 1);
 
-    if (deg == DEG_NONE) {
+    if (deg == DEG_NONE)
+    {
         char pbuf[8], dbuf[8];
         format_pressure(pbuf, P);
         format_pressure(dbuf, dP);
@@ -62,7 +68,8 @@ void ui_draw_main(enum Step step, uint32_t timer_s,
         lcd.print(dbuf);
         lcd.print(F("  "));
     }
-    else {
+    else
+    {
         char pbuf[8];
         format_pressure(pbuf, P);
         lcd.print(F("P="));
@@ -75,12 +82,12 @@ void ui_draw_main(enum Step step, uint32_t timer_s,
 // ---------------------------------------------------------------------------
 // Экран 1: датчики
 // ---------------------------------------------------------------------------
-static const char* const SENS_NAMES[] = {
-    "OK", "OPEN", "SHORT", "RAIL_L", "RAIL_H"
-};
+static const char *const SENS_NAMES[] = {
+    "OK", "OPEN", "SHORT", "RAIL_L", "RAIL_H"};
 
 static void draw_sensor_row(uint8_t row, char label,
-                            const struct SensorReading* r) {
+                            const struct SensorReading *r)
+{
     lcd.setCursor(0, row);
     lcd.print(label);
     lcd.print('=');
@@ -90,15 +97,17 @@ static void draw_sensor_row(uint8_t row, char label,
     lcd.print(pbuf);
     lcd.print(' ');
 
-    const char* s = SENS_NAMES[r->state];
+    const char *s = SENS_NAMES[r->state];
     lcd.print(s);
     // затирка хвоста
     uint8_t len = 2 + 5 + 1 + strlen(s);
-    for (uint8_t i = len; i < 16; i++) lcd.print(' ');
+    for (uint8_t i = len; i < 16; i++)
+        lcd.print(' ');
 }
 
-void ui_draw_sensors(const struct SensorReading* p1,
-                     const struct SensorReading* p2) {
+void ui_draw_sensors(const struct SensorReading *p1,
+                     const struct SensorReading *p2)
+{
     draw_sensor_row(0, '1', p1);
     draw_sensor_row(1, '2', p2);
 }
@@ -106,7 +115,8 @@ void ui_draw_sensors(const struct SensorReading* p1,
 // ---------------------------------------------------------------------------
 // Экран 2: уставки
 // ---------------------------------------------------------------------------
-void ui_draw_settings(uint8_t cursor) {
+void ui_draw_settings(uint8_t cursor)
+{
     char buf[10];
 
     // Строка 1: FILL
@@ -123,10 +133,14 @@ void ui_draw_settings(uint8_t cursor) {
     lcd.print(cursor == 1 ? '>' : ' ');
     lcd.print(F("HOLD "));
     // Вывод минут с выравниванием по правому краю (4 знака)
-    if (hold_min > 9999) hold_min = 9999;
-    if (hold_min < 10) lcd.print(' ');
-    if (hold_min < 100) lcd.print(' ');
-    if (hold_min < 1000) lcd.print(' ');
+    if (hold_min > 9999)
+        hold_min = 9999;
+    if (hold_min < 10)
+        lcd.print(' ');
+    if (hold_min < 100)
+        lcd.print(' ');
+    if (hold_min < 1000)
+        lcd.print(' ');
     lcd.print(hold_min);
     lcd.print(F(" min  "));
 }
@@ -134,39 +148,43 @@ void ui_draw_settings(uint8_t cursor) {
 // ---------------------------------------------------------------------------
 // Аварийный экран
 // ---------------------------------------------------------------------------
-void ui_draw_fault(float P, enum FaultReason fault) {
+void ui_draw_fault(float P, enum FaultReason fault)
+{
     lcd.setCursor(0, 0);
     lcd.print(F("!! FAULT !!     "));
 
     lcd.setCursor(0, 1);
-    switch (fault) {
-        case FAULT_OVER: {
-            char pbuf[8], mbuf[8];
-            format_pressure(pbuf, P);
-            format_pressure(mbuf, P_MAX_BAR);
-            lcd.print(F("OVER "));
-            lcd.print(pbuf);
-            lcd.print('/');
-            lcd.print(mbuf);
-            lcd.print(F("  "));
-            break;
-        }
-        case FAULT_SENSOR:
-            lcd.print(F("SENSOR FAULT    "));
-            break;
-        case FAULT_MISMATCH:
-            lcd.print(F("P1!=P2 MISMATCH "));
-            break;
-        default:
-            lcd.print(F("FAULT           "));
-            break;
+    switch (fault)
+    {
+    case FAULT_OVER:
+    {
+        char pbuf[8], mbuf[8];
+        format_pressure(pbuf, P);
+        format_pressure(mbuf, P_MAX_BAR);
+        lcd.print(F("OVER "));
+        lcd.print(pbuf);
+        lcd.print('/');
+        lcd.print(mbuf);
+        lcd.print(F("  "));
+        break;
+    }
+    case FAULT_SENSOR:
+        lcd.print(F("SENSOR FAULT    "));
+        break;
+    case FAULT_MISMATCH:
+        lcd.print(F("P1!=P2 MISMATCH "));
+        break;
+    default:
+        lcd.print(F("FAULT           "));
+        break;
     }
 }
 
 // ---------------------------------------------------------------------------
 // API
 // ---------------------------------------------------------------------------
-void ui_init(void) {
+void ui_init(void)
+{
     lcd.begin(16, 2);
     lcd.clear();
 }
